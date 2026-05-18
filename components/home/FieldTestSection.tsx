@@ -1,7 +1,32 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { useInView } from "framer-motion";
+
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function FieldTestSection() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const inView = useInView(videoRef, { once: false, amount: 0.5 });
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    if (!videoElement) {
+      return;
+    }
+
+    if (inView) {
+      void videoElement.play().catch(() => {
+        // Tarayici otomatik oynatmayi engellerse kullanici kontrolleri kullanabilir.
+      });
+      return;
+    }
+
+    videoElement.pause();
+  }, [inView]);
+
   return (
     <section className="section-frame bg-primary">
       <Container>
@@ -15,6 +40,7 @@ export function FieldTestSection() {
           <div className="overflow-hidden rounded-brand border border-[#1414131A] bg-white">
             <div className="flex justify-center bg-[#1a1a18] p-3 sm:p-4">
               <video
+                ref={videoRef}
                 className="block max-h-[78vh] w-auto max-w-full rounded-brand object-contain"
                 controls
                 muted
