@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #faf9f5;
+  color: #141413;
+  font-family: "Source Serif 4", serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(217, 119, 87, 0.22);
+  color: #141413;
+}
+
+@layer base {
+  * {
+    @apply border-neutral-border;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  a {
+    @apply font-sans;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply tracking-[-0.04em] leading-[1.05] text-slate-dark;
+  }
+
+  p {
+    @apply text-[1.05rem] font-medium leading-[1.45] text-slate-light;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply min-h-screen bg-primary text-slate-dark;
+  }
+
+  .section-frame {
+    @apply py-24 sm:py-32 lg:py-40;
+  }
+
+  .section-container {
+    @apply mx-auto w-full max-w-8xl px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply mb-5 inline-flex items-center gap-2 rounded-full border border-neutral-border bg-white/70 px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-slate-light backdrop-blur-sm;
+  }
+
+  .headline-display {
+    @apply font-sans text-4xl font-black tracking-[-0.06em] text-slate-dark sm:text-5xl lg:text-7xl;
+  }
+
+  .headline-section {
+    @apply font-sans text-3xl font-black tracking-[-0.05em] text-slate-dark sm:text-4xl lg:text-5xl;
+  }
+
+  .body-large {
+    @apply text-lg leading-[1.45] text-slate-light sm:text-xl;
+  }
+
+  .card-surface {
+    @apply rounded-brand border border-neutral-border bg-white;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center rounded-brand bg-[#141413] px-6 py-3.5 font-sans text-sm font-semibold text-[#faf9f5] transition-colors duration-200 hover:bg-[#3d3d3a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#141413] focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f5];
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center rounded-brand border border-[#141413] bg-transparent px-6 py-3.5 font-sans text-sm font-semibold text-[#141413] transition-colors duration-200 hover:bg-[#141413] hover:text-[#faf9f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#141413] focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f5];
+  }
+}
+
+@layer utilities {
+  .text-wrap-balance {
+    text-wrap: balance;
+  }
+}
