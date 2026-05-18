@@ -13,9 +13,9 @@ export function FieldTestSection() {
           />
 
           <div className="overflow-hidden rounded-brand border border-[#1414131A] bg-white">
-            <div className="relative aspect-video bg-[#1a1a18]">
+            <div className="flex justify-center bg-[#1a1a18] p-3 sm:p-4">
               <video
-                className="h-full w-full object-cover"
+                className="block max-h-[78vh] w-auto max-w-full rounded-brand object-contain"
                 controls
                 muted
                 playsInline
