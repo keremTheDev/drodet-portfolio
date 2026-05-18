@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/Card";
+import { ArchitectureCard } from "@/components/home/ArchitectureCard";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { architectureCards } from "@/lib/data";
@@ -14,11 +14,13 @@ export function ArchitectureSection() {
         />
 
         <div className="mt-16 grid gap-6 lg:grid-cols-3">
-          {architectureCards.map((card) => (
-            <Card key={card.title} className="h-full p-8 sm:p-10">
-              <h3 className="text-2xl font-black">{card.title}</h3>
-              <p className="mt-4">{card.description}</p>
-            </Card>
+          {architectureCards.map((card, index) => (
+            <ArchitectureCard
+              key={card.title}
+              index={index}
+              title={card.title}
+              description={card.description}
+            />
           ))}
         </div>
       </Container>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { ScrollRadar } from "@/components/ui/ScrollRadar";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +19,10 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="tr">
-      <body className="site-shell">{children}</body>
+      <body className="site-shell">
+        <ScrollRadar />
+        {children}
+      </body>
     </html>
   );
 }

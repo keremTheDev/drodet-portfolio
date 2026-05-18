@@ -37,19 +37,19 @@ export const architectureCards = [
 export const metricsData = [
   {
     metrik: "Doğruluk",
-    oran: 93
+    oran: 93.6
   },
   {
     metrik: "Hassasiyet",
-    oran: 89
+    oran: 89.4
   },
   {
     metrik: "Duyarlılık",
-    oran: 91
+    oran: 91.8
   },
   {
     metrik: "mAP50",
-    oran: 94
+    oran: 94.8
   }
 ] as const;
 

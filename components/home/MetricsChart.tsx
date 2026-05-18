@@ -47,7 +47,7 @@ export function MetricsChart() {
               fontFamily: "Inter",
               fontWeight: 700
             }}
-            formatter={(value: number) => [`%${value}`, "Skor"]}
+            formatter={(value: number) => [`%${value.toFixed(1)}`, "Skor"]}
           />
           <Bar dataKey="oran" radius={[8, 8, 0, 0]}>
             {chartData.map((item, index) => (
