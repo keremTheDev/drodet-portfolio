@@ -9,24 +9,24 @@ export function FieldTestSection() {
           <SectionHeading
             eyebrow="Saha Doğrulaması"
             title="Saha Testi"
-            description="Gerçek ortam koşullarında yapılan denemeler, farklı hız, mesafe ve arka planlarda modelin tutarlılığını ve operatör görünürlüğünü test etmek için kurgulandı."
+            description="Gerçek ortam koşullarında yapılan denemeler; farklı hız, mesafe ve arka planlarda modelin tutarlılığını ve operatör görünürlüğünü test etmek için kurgulandı. TRT Genel Müdürlüğü'nden özel izin alarak gerçekleştirdiğimiz bu saha testlerinde, profesyonel yayın ve çekim donanımlarıyla çalışma şansı yakaladık. Bu sayede, gerçek endüstriyel şartlarda otonom modelimizin nasıl tepki verdiğini tam anlamıyla deneyimledik."
           />
 
-          <div className="card-surface overflow-hidden">
+          <div className="overflow-hidden rounded-brand border border-[#1414131A] bg-white">
             <div className="relative aspect-video bg-[#1a1a18]">
               <video
                 className="h-full w-full object-cover"
                 controls
+                muted
+                playsInline
                 poster="/images/field-test-poster.svg"
                 aria-label="Drone tespit saha testi videosu"
               >
-                <source src="/videos/field-test.mp4" type="video/mp4" />
+                <source
+                  src="https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/videos/WhatsApp%20Video%202026-05-18%20at%2002.41.41.mp4"
+                  type="video/mp4"
+                />
               </video>
-            </div>
-            <div className="border-t border-neutral-border bg-white px-5 py-4 sm:px-6">
-              <p className="font-sans text-sm leading-6 text-slate-light">
-                Yer tutucu video yolu: <span className="font-mono text-slate-dark">/videos/field-test.mp4</span>
-              </p>
             </div>
           </div>
         </div>
