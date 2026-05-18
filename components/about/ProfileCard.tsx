@@ -11,9 +11,12 @@ type ProfileCardProps = {
   role: string;
   bio: string;
   imageUrl: string;
-  linkedin: string;
-  github: string;
-  cvHref: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  cvLinks: ReadonlyArray<{
+    label: string;
+    url: string;
+  }>;
 };
 
 export function ProfileCard({
@@ -21,9 +24,9 @@ export function ProfileCard({
   role,
   bio,
   imageUrl,
-  linkedin,
-  github,
-  cvHref
+  linkedinUrl,
+  githubUrl,
+  cvLinks
 }: ProfileCardProps) {
   return (
     <motion.div
@@ -45,7 +48,7 @@ export function ProfileCard({
           <img
             src={imageUrl}
             alt={`${name} profil fotoğrafı`}
-            className="mb-6 w-full aspect-[4/5] object-cover"
+            className="mb-6 w-full aspect-[4/5] rounded-t-brand object-cover"
             loading="lazy"
           />
 
@@ -60,7 +63,7 @@ export function ProfileCard({
 
               <div className="flex items-center gap-2">
                 <a
-                  href={linkedin}
+                  href={linkedinUrl}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${name} LinkedIn profili`}
@@ -69,7 +72,7 @@ export function ProfileCard({
                   <Linkedin size={18} />
                 </a>
                 <a
-                  href={github}
+                  href={githubUrl}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${name} GitHub profili`}
@@ -82,8 +85,12 @@ export function ProfileCard({
 
             <p className="mt-8">{bio}</p>
 
-            <div className="mt-10">
-              <SecondaryButton href={cvHref}>Özgeçmişi İndir</SecondaryButton>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              {cvLinks.map((cvLink) => (
+                <SecondaryButton key={cvLink.url} href={cvLink.url}>
+                  {cvLink.label}
+                </SecondaryButton>
+              ))}
             </div>
           </div>
         </div>
