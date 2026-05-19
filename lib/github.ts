@@ -2,23 +2,30 @@ import "server-only";
 
 type GithubStats = {
   commits: number;
-  contributors: number;
-  primaryLanguage: string;
-  primaryLanguageShare: number;
+  linesOfCode: number;
+  topLanguage: string;
+  topLanguagePercentage: number;
 };
 
 const FALLBACK_STATS: GithubStats = {
   commits: 184,
-  contributors: 2,
-  primaryLanguage: "TypeScript",
-  primaryLanguageShare: 78.4
+  linesOfCode: 12500,
+  topLanguage: "TypeScript",
+  topLanguagePercentage: 78.4
 };
 
 type GithubRepoResponse = {
   default_branch: string;
+  language?: string | null;
 };
 
 type GithubLanguageResponse = Record<string, number>;
+type GithubContributorStatsResponse = Array<{
+  total: number;
+  weeks: Array<{
+    a: number;
+  }>;
+}>;
 
 async function fetchGithub(path: string) {
   const repo = process.env.GITHUB_REPO;
@@ -38,68 +45,100 @@ async function fetchGithub(path: string) {
   });
 }
 
-function getCommitCountFromLinkHeader(linkHeader: string | null) {
-  if (!linkHeader) {
-    return null;
-  }
+function getTopLanguage(languagesData: GithubLanguageResponse) {
+  const totalLanguageBytes = Object.values(languagesData).reduce(
+    (sum, value) => sum + value,
+    0
+  );
 
-  const match = linkHeader.match(/[?&]page=(\d+)>;\s*rel="last"/);
-  return match ? Number(match[1]) : null;
+  const [topLanguage = FALLBACK_STATS.topLanguage, topLanguageBytes = 0] =
+    Object.entries(languagesData).sort(([, left], [, right]) => right - left)[0] ?? [];
+
+  const topLanguagePercentage = totalLanguageBytes
+    ? Number(((topLanguageBytes / totalLanguageBytes) * 100).toFixed(1))
+    : FALLBACK_STATS.topLanguagePercentage;
+
+  return {
+    topLanguage,
+    topLanguagePercentage
+  };
 }
 
 export async function getGithubStats(): Promise<GithubStats> {
   try {
-    const repoResponse = await fetchGithub("");
-
-    if (!repoResponse.ok) {
-      throw new Error(`Repo bilgisi alınamadı: ${repoResponse.status}`);
-    }
-
-    const repoData = (await repoResponse.json()) as GithubRepoResponse;
-
-    const [contributorsResponse, languagesResponse, commitsResponse] = await Promise.all([
-      fetchGithub("/contributors?per_page=100&anon=1"),
-      fetchGithub("/languages"),
-      fetchGithub(`/commits?sha=${encodeURIComponent(repoData.default_branch)}&per_page=1`)
+    const [contributorsStatsResponse, languagesResponse] = await Promise.all([
+      fetchGithub("/stats/contributors"),
+      fetchGithub("/languages")
     ]);
 
-    if (!contributorsResponse.ok || !languagesResponse.ok || !commitsResponse.ok) {
-      throw new Error("GitHub metrikleri eksik döndü.");
+    if (!languagesResponse.ok) {
+      throw new Error("Dil istatistikleri alınamadı.");
     }
 
-    const contributorsData = (await contributorsResponse.json()) as unknown[];
     const languagesData = (await languagesResponse.json()) as GithubLanguageResponse;
+    const languageSummary = getTopLanguage(languagesData);
 
-    const commitCountFromHeader = getCommitCountFromLinkHeader(
-      commitsResponse.headers.get("link")
-    );
-
-    let commits = commitCountFromHeader ?? 0;
-
-    if (!commitCountFromHeader) {
-      const commitsData = (await commitsResponse.json()) as unknown[];
-      commits = Array.isArray(commitsData) ? commitsData.length : 0;
+    if (
+      !contributorsStatsResponse.ok ||
+      contributorsStatsResponse.status === 202 ||
+      contributorsStatsResponse.status === 204
+    ) {
+      throw new Error("Contributors stats henüz hazır değil.");
     }
 
-    const totalLanguageBytes = Object.values(languagesData).reduce(
-      (sum, value) => sum + value,
+    const contributorsStats =
+      (await contributorsStatsResponse.json()) as GithubContributorStatsResponse;
+
+    if (!Array.isArray(contributorsStats) || contributorsStats.length === 0) {
+      throw new Error("Contributors stats boş döndü.");
+    }
+
+    const commits = contributorsStats.reduce(
+      (sum, contributor) => sum + contributor.total,
+      0
+    );
+    const linesOfCode = contributorsStats.reduce(
+      (sum, contributor) =>
+        sum +
+        contributor.weeks.reduce((weekSum, week) => weekSum + Math.max(week.a, 0), 0),
       0
     );
 
-    const [primaryLanguage = FALLBACK_STATS.primaryLanguage, primaryLanguageBytes = 0] =
-      Object.entries(languagesData).sort(([, left], [, right]) => right - left)[0] ?? [];
-
-    const primaryLanguageShare = totalLanguageBytes
-      ? Number(((primaryLanguageBytes / totalLanguageBytes) * 100).toFixed(1))
-      : FALLBACK_STATS.primaryLanguageShare;
-
     return {
       commits: commits || FALLBACK_STATS.commits,
-      contributors: contributorsData.length || FALLBACK_STATS.contributors,
-      primaryLanguage,
-      primaryLanguageShare
+      linesOfCode: linesOfCode || FALLBACK_STATS.linesOfCode,
+      topLanguage: languageSummary.topLanguage,
+      topLanguagePercentage: languageSummary.topLanguagePercentage
     };
   } catch {
-    return FALLBACK_STATS;
+    try {
+      const [repoResponse, languagesResponse] = await Promise.all([
+        fetchGithub(""),
+        fetchGithub("/languages")
+      ]);
+
+      const repoData = repoResponse.ok
+        ? ((await repoResponse.json()) as GithubRepoResponse)
+        : null;
+      const languagesData = languagesResponse.ok
+        ? ((await languagesResponse.json()) as GithubLanguageResponse)
+        : {};
+      const languageSummary =
+        Object.keys(languagesData).length > 0
+          ? getTopLanguage(languagesData)
+          : {
+              topLanguage: repoData?.language || FALLBACK_STATS.topLanguage,
+              topLanguagePercentage: FALLBACK_STATS.topLanguagePercentage
+            };
+
+      return {
+        commits: FALLBACK_STATS.commits,
+        linesOfCode: FALLBACK_STATS.linesOfCode,
+        topLanguage: languageSummary.topLanguage,
+        topLanguagePercentage: languageSummary.topLanguagePercentage
+      };
+    } catch {
+      return FALLBACK_STATS;
+    }
   }
 }

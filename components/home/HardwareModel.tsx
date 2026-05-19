@@ -50,12 +50,12 @@ useGLTF.preload(ESP32_MODEL_URL);
 
 export function HardwareModel() {
   return (
-    <div className="h-full min-h-[400px] w-full overflow-hidden rounded-brand border border-neutral-border bg-[radial-gradient(circle_at_top,rgba(217,119,87,0.16),transparent_34%),linear-gradient(180deg,rgba(20,20,19,0.03)_0%,rgba(20,20,19,0.08)_100%)]">
+    <div className="relative flex h-[350px] w-full items-center justify-center overflow-hidden rounded-brand border border-[#1414131A] bg-[#1414130A] md:h-[450px]">
       <Canvas
         shadows
         dpr={[1, 1.5]}
         camera={{ position: [0, 1.6, 3.8], fov: 45 }}
-        className="transform-gpu"
+        className="absolute inset-0 h-full w-full transform-gpu outline-none"
       >
         <ambientLight intensity={1} />
         <directionalLight

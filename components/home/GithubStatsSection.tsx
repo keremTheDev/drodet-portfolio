@@ -1,4 +1,4 @@
-import { Code2, GitCommitHorizontal, Users2 } from "lucide-react";
+import { Code2, GitCommitHorizontal, Languages } from "lucide-react";
 
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { Container } from "@/components/ui/Container";
@@ -11,41 +11,57 @@ type StatCard = {
   icon: typeof GitCommitHorizontal;
   suffix: string;
   decimals?: number;
+  languageName?: string;
+  languageColor?: string;
 };
 
 export async function GithubStatsSection() {
   const stats = await getGithubStats();
 
+  const languageColors: Record<string, string> = {
+    Python: "#3572A5",
+    TypeScript: "#3178c6",
+    JavaScript: "#f1e05a",
+    C: "#555555",
+    "C++": "#f34b7d",
+    Rust: "#dea584",
+    Go: "#00add8"
+  };
+
   const cards: StatCard[] = [
     {
-      title: "Toplam Commit",
-      description: "Depodaki sürekli geliştirme ritmini gösteren tahmini commit hacmi.",
+      title: "TOTAL COMMITS",
+      description: "Depodaki toplam sürümleme aktivitesini yansıtan commit hacmi.",
       value: stats.commits,
       icon: GitCommitHorizontal,
       suffix: ""
     },
     {
-      title: "Katkı Sağlayan Kişi",
-      description: "Kod tabanına doğrudan katkı veren ekip üyesi sayısı.",
-      value: stats.contributors,
-      icon: Users2,
+      title: "LINES OF CODE (ADDITIONS)",
+      description: "Contributors stats API üzerinden hesaplanan toplam eklenen kod satırı.",
+      value: stats.linesOfCode,
+      icon: Code2,
       suffix: ""
     },
     {
-      title: `${stats.primaryLanguage} Payı`,
-      description: "Kaynak kod içinde en baskın teknolojinin yaklaşık dağılım oranı.",
-      value: stats.primaryLanguageShare,
-      icon: Code2,
+      title: "PRIMARY LANGUAGE",
+      description: "Kod tabanındaki baskın dilin toplam dağılım yüzdesi.",
+      value: stats.topLanguagePercentage,
+      icon: Languages,
       suffix: "%",
-      decimals: 1
+      decimals: 1,
+      languageName: stats.topLanguage,
+      languageColor: languageColors[stats.topLanguage] ?? "#57606a"
     }
   ];
 
   return (
-    <section className="section-frame bg-primary">
+    <section className="section-frame bg-[#f6f8fa]">
       <Container>
         <div className="max-w-3xl">
-          <span className="eyebrow">Canlı GitHub Verisi</span>
+          <span className="eyebrow border-[#d0d7de] bg-white text-[#57606a]">
+            Canlı GitHub Verisi
+          </span>
           <h2 className="headline-section text-wrap-balance">
             Geliştirme Süreci ve Canlı Metrikler
           </h2>
@@ -61,26 +77,39 @@ export async function GithubStatsSection() {
             return (
               <article
                 key={card.title}
-                className="card-surface flex h-full flex-col justify-between p-6 sm:p-7"
+                className="flex h-full flex-col justify-between rounded-md border border-[#d0d7de] bg-white p-6 text-left"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-sans text-sm font-semibold uppercase tracking-[0.14em] text-accent-primary">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Icon className="h-4 w-4 text-[#57606a]" />
+                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-[#57606a]">
                       {card.title}
                     </p>
-                    <AnimatedCounter
-                      value={card.value}
-                      decimals={card.decimals ?? 0}
-                      suffix={card.suffix}
-                      className="mt-4 block font-sans text-4xl font-black tracking-[-0.05em] text-slate-dark"
-                    />
                   </div>
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-neutral-border bg-secondary text-accent-primary">
-                    <Icon size={22} />
-                  </div>
+
+                  <AnimatedCounter
+                    value={card.value}
+                    decimals={card.decimals ?? 0}
+                    suffix={card.suffix}
+                    className="mt-4 block font-mono text-3xl font-bold text-[#24292f]"
+                  />
+
+                  {card.languageName ? (
+                    <div className="mt-4 flex items-center gap-2">
+                      <span
+                        className="h-3 w-3 rounded-full"
+                        style={{ backgroundColor: card.languageColor }}
+                      />
+                      <span className="font-sans text-sm font-medium text-[#24292f]">
+                        {card.languageName}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
 
-                <p className="mt-8 text-base leading-[1.5]">{card.description}</p>
+                <p className="mt-8 text-sm leading-6 text-[#57606a]">
+                  {card.description}
+                </p>
               </article>
             );
           })}
