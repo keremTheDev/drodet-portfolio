@@ -5,6 +5,9 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
 
+const ESP32_MODEL_URL =
+  "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/models/esp32.glb";
+
 function LoadingFallback() {
   return (
     <Html center>
@@ -17,7 +20,7 @@ function LoadingFallback() {
 
 function ESP32Model() {
   const groupRef = useRef<Group | null>(null);
-  const { scene } = useGLTF("/models/esp32.glb");
+  const { scene } = useGLTF(ESP32_MODEL_URL);
   const { size } = useThree();
 
   const modelScene = useMemo(() => scene.clone(), [scene]);
@@ -43,7 +46,7 @@ function ESP32Model() {
   );
 }
 
-useGLTF.preload("/models/esp32.glb");
+useGLTF.preload(ESP32_MODEL_URL);
 
 export function HardwareModel() {
   return (

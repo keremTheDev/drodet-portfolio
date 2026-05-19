@@ -2,6 +2,7 @@ import { ArchitectureSection } from "@/components/home/ArchitectureSection";
 import { CommunicationSection } from "@/components/home/CommunicationSection";
 import { CtaSection } from "@/components/home/CtaSection";
 import { FieldTestSection } from "@/components/home/FieldTestSection";
+import { GithubStatsSection } from "@/components/home/GithubStatsSection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { MetricsSection } from "@/components/home/MetricsSection";
 import { StorySection } from "@/components/home/StorySection";
@@ -15,6 +16,7 @@ export default function HomePage() {
       <CommunicationSection />
       <FieldTestSection />
       <MetricsSection />
+      <GithubStatsSection />
       <CtaSection />
     </main>
   );

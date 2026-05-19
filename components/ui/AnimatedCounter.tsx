@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { useInView, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 type AnimatedCounterProps = {
   value: number;
@@ -23,7 +23,25 @@ export function AnimatedCounter({
   const ref = useRef<HTMLSpanElement | null>(null);
   const isInView = useInView(ref, { once: true, amount: 0.55 });
   const reduceMotion = useReducedMotion();
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, {
+    damping: 24,
+    stiffness: Math.max(120, 2600 / duration)
+  });
   const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const unsubscribe = springValue.on("change", (latest) => {
+      setDisplayValue(latest);
+    });
+
+    return () => unsubscribe();
+  }, [reduceMotion, springValue, value]);
 
   useEffect(() => {
     if (!isInView) {
@@ -35,23 +53,9 @@ export function AnimatedCounter({
       return;
     }
 
-    let frameId = 0;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayValue(value * eased);
-
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(tick);
-      }
-    };
-
-    frameId = window.requestAnimationFrame(tick);
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [duration, isInView, reduceMotion, value]);
+    motionValue.set(0);
+    motionValue.set(value);
+  }, [isInView, motionValue, reduceMotion, value]);
 
   const formattedValue = useMemo(
     () =>
