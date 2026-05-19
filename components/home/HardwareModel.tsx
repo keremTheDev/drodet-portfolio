@@ -24,7 +24,7 @@ function ESP32Model() {
   const { size } = useThree();
 
   const modelScene = useMemo(() => scene.clone(), [scene]);
-  const modelScale = size.width < 768 ? 0.075 : 0.1;
+  const modelScale = size.width < 768 ? 0.065 : 0.09;
 
   useFrame(() => {
     if (!groupRef.current) {
