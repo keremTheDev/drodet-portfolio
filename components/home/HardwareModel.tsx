@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
 
@@ -18,8 +18,10 @@ function LoadingFallback() {
 function ESP32Model() {
   const groupRef = useRef<Group | null>(null);
   const { scene } = useGLTF("/models/esp32.glb");
+  const { size } = useThree();
 
   const modelScene = useMemo(() => scene.clone(), [scene]);
+  const modelScale = size.width < 768 ? 0.075 : 0.1;
 
   useFrame(() => {
     if (!groupRef.current) {
@@ -34,7 +36,7 @@ function ESP32Model() {
       <Center>
         <primitive
           object={modelScene}
-          scale={0.05} // TODO: Adjust this scale value (e.g., 0.1, 0.01, 0.005) depending on the true export size of your .glb file.
+          scale={modelScale} // TODO: Adjust this scale value (e.g., 0.1, 0.01, 0.005) depending on the true export size of your .glb file.
         />
       </Center>
     </group>
@@ -45,11 +47,11 @@ useGLTF.preload("/models/esp32.glb");
 
 export function HardwareModel() {
   return (
-    <div className="h-[20rem] w-full overflow-hidden rounded-brand border border-neutral-border bg-[radial-gradient(circle_at_top,rgba(217,119,87,0.16),transparent_34%),linear-gradient(180deg,rgba(20,20,19,0.03)_0%,rgba(20,20,19,0.08)_100%)] sm:h-[24rem]">
+    <div className="h-full min-h-[400px] w-full overflow-hidden rounded-brand border border-neutral-border bg-[radial-gradient(circle_at_top,rgba(217,119,87,0.16),transparent_34%),linear-gradient(180deg,rgba(20,20,19,0.03)_0%,rgba(20,20,19,0.08)_100%)]">
       <Canvas
         shadows
         dpr={[1, 1.5]}
-        camera={{ position: [0, 2, 5], fov: 50 }}
+        camera={{ position: [0, 1.6, 3.8], fov: 45 }}
         className="transform-gpu"
       >
         <ambientLight intensity={1} />
