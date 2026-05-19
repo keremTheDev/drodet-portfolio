@@ -1,4 +1,5 @@
 import { ArchitectureSection } from "@/components/home/ArchitectureSection";
+import { CommunicationSection } from "@/components/home/CommunicationSection";
 import { CtaSection } from "@/components/home/CtaSection";
 import { FieldTestSection } from "@/components/home/FieldTestSection";
 import { HeroSection } from "@/components/home/HeroSection";
@@ -11,6 +12,7 @@ export default function HomePage() {
       <HeroSection />
       <StorySection />
       <ArchitectureSection />
+      <CommunicationSection />
       <FieldTestSection />
       <MetricsSection />
       <CtaSection />
