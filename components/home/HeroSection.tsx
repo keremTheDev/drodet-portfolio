@@ -1,9 +1,17 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Maximize2, X } from "lucide-react";
+import { useState } from "react";
+
 import { DecryptText } from "@/components/ui/DecryptText";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Container } from "@/components/ui/Container";
 import { HudOverlay } from "@/components/home/HudOverlay";
 
 export function HeroSection() {
+  const [isCinematic, setIsCinematic] = useState(false);
+
   return (
     <section className="relative flex min-h-screen items-end overflow-hidden">
       <video
@@ -23,10 +31,49 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,19,0.32)_0%,rgba(20,20,19,0.72)_58%,rgba(20,20,19,0.86)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(217,119,87,0.18),transparent_34%)]" />
       <div className="hud-grid absolute inset-0 opacity-[0.18] mix-blend-soft-light" />
-      <HudOverlay />
+      <HudOverlay isHidden={isCinematic} />
+
+      <button
+        type="button"
+        onClick={() => setIsCinematic((current) => !current)}
+        className="button-target group absolute right-4 top-4 z-50 inline-flex min-h-11 items-center gap-2 rounded-brand border border-white/20 bg-black/20 px-4 py-2.5 font-sans text-sm font-semibold text-white backdrop-blur-md transition-colors duration-300 hover:bg-black/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:right-6 sm:top-6"
+        aria-pressed={isCinematic}
+        aria-label={isCinematic ? "Sinematik görünümden çık" : "Videoya odaklan"}
+      >
+        <span aria-hidden="true" className="button-corner button-corner-top-left">
+          +
+        </span>
+        <span aria-hidden="true" className="button-corner button-corner-top-right">
+          +
+        </span>
+        <span aria-hidden="true" className="button-corner button-corner-bottom-left">
+          +
+        </span>
+        <span aria-hidden="true" className="button-corner button-corner-bottom-right">
+          +
+        </span>
+        {isCinematic ? <X className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        <span className="button-label">{isCinematic ? "Geri Dön" : "Videoya Odaklan"}</span>
+      </button>
 
       <Container className="relative z-10 flex w-full pb-16 pt-32 sm:pb-20 lg:pb-24">
-        <div className="max-w-4xl">
+        <motion.div
+          animate={isCinematic ? "hidden" : "visible"}
+          variants={{
+            visible: {
+              opacity: 1,
+              y: 0,
+              pointerEvents: "auto"
+            },
+            hidden: {
+              opacity: 0,
+              y: 20,
+              pointerEvents: "none"
+            }
+          }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="max-w-4xl"
+        >
           <span className="eyebrow border-white/20 bg-white/10 text-white backdrop-blur-md">
             Dost - Düşman Drone Tespit Sistemi
           </span>
@@ -58,7 +105,7 @@ export function HeroSection() {
               <span className="button-label">Hikâyeyi Keşfedin</span>
             </a>
           </div>
-        </div>
+        </motion.div>
       </Container>
     </section>
   );

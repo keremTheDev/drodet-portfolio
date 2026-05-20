@@ -2,11 +2,22 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-export function HudOverlay() {
+type HudOverlayProps = {
+  isHidden?: boolean;
+};
+
+export function HudOverlay({ isHidden = false }: HudOverlayProps) {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="pointer-events-none absolute inset-0">
+    <motion.div
+      animate={{
+        opacity: isHidden ? 0 : 1,
+        pointerEvents: isHidden ? "none" : "auto"
+      }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="pointer-events-none absolute inset-0"
+    >
       <svg
         viewBox="0 0 1600 900"
         className="absolute inset-0 h-full w-full opacity-80"
@@ -46,13 +57,13 @@ export function HudOverlay() {
               }
         }
         transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <motion.div
-          className="absolute left-0 right-0 h-px bg-[linear-gradient(90deg,rgba(116,196,118,0),rgba(116,196,118,0.88),rgba(217,119,87,0.85),rgba(116,196,118,0))] shadow-[0_0_12px_rgba(116,196,118,0.38)]"
-          animate={reduceMotion ? undefined : { y: ["0%", "980%"] }}
-          transition={{ duration: 5.4, repeat: Infinity, ease: "linear" }}
-        />
-      </motion.div>
-    </div>
+        >
+          <motion.div
+            className="absolute left-0 right-0 h-px bg-[linear-gradient(90deg,rgba(116,196,118,0),rgba(116,196,118,0.88),rgba(217,119,87,0.85),rgba(116,196,118,0))] shadow-[0_0_12px_rgba(116,196,118,0.38)]"
+            animate={reduceMotion ? undefined : { y: ["0%", "980%"] }}
+            transition={{ duration: 5.4, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
+    </motion.div>
   );
 }
