@@ -16,35 +16,35 @@ const metricSlides = [
     type: "image",
     title: "Precision - Recall Eğrisi",
     description: "Sınıf bazlı PR davranışı ve genel mAP@0.5 görünümü.",
-    src: "/images/BoxPR_curve.png",
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/pictures/BoxPR_curve.png",
     alt: "Precision recall eğrisi"
   },
   {
     type: "image",
     title: "F1 Confidence Eğrisi",
     description: "Confidence eşiğine göre F1 skor değişimi.",
-    src: "/images/BoxF1_curve.png",
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/pictures/BoxF1_curve.png",
     alt: "F1 confidence eğrisi"
   },
   {
     type: "image",
     title: "Precision Confidence Eğrisi",
     description: "Confidence eşiğine göre precision davranışı.",
-    src: "/images/BoxP_curve.png",
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/pictures/BoxP_curve.png",
     alt: "Precision confidence eğrisi"
   },
   {
     type: "image",
     title: "Normalize Confusion Matrix",
     description: "Sınıflar arası normalize hata dağılımı.",
-    src: "/images/confusion_matrix_normalized.png",
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/pictures/confusion_matrix_normalized.png",
     alt: "Normalize edilmiş confusion matrix"
   },
   {
     type: "image",
     title: "Confusion Matrix",
     description: "Ham sınıf karışıklık matrisi.",
-    src: "/images/confusion_matrix.png",
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/pictures/confusion_matrix.png",
     alt: "Confusion matrix"
   }
 ] as const;

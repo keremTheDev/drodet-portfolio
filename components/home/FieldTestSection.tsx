@@ -10,7 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 const fieldTestVideos = [
   {
     label: "30 FPS OBS Testi",
-    src: "/videos/obs_3x_30fps.mp4"
+    src: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/videos/obs_3x_30fps.mp4"
   },
   {
     label: "TRT Saha Kaydı",
