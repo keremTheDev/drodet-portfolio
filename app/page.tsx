@@ -5,6 +5,7 @@ import { FieldTestSection } from "@/components/home/FieldTestSection";
 import { GithubStatsSection } from "@/components/home/GithubStatsSection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { MetricsSection } from "@/components/home/MetricsSection";
+import { ModelStatsSection } from "@/components/home/ModelStatsSection";
 import { StorySection } from "@/components/home/StorySection";
 
 export default function HomePage() {
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HeroSection />
       <StorySection />
       <ArchitectureSection />
+      <ModelStatsSection />
       <CommunicationSection />
       <FieldTestSection />
       <MetricsSection />

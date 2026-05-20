@@ -18,9 +18,9 @@ const chartData = metricsData.map((item) => ({ ...item }));
 
 export function MetricsChart() {
   return (
-    <div className="h-[320px] w-full sm:h-[360px]">
+    <div className="h-[280px] w-full sm:h-[320px]">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} margin={{ top: 12, right: 12, left: -18, bottom: 0 }}>
+        <BarChart data={chartData} margin={{ top: 8, right: 12, left: -18, bottom: 0 }}>
           <CartesianGrid stroke="#1414131A" vertical={false} />
           <XAxis
             dataKey="metrik"

@@ -23,7 +23,7 @@ export const architectureCards = [
       "Özel veri kümesi, farklı irtifa, aydınlatma, arka plan ve manevra senaryolarını kapsayacak şekilde oluşturuldu. Etiketleme süreci, savunma projelerinde gerekli izlenebilirlik ve tekrar üretilebilirlik ilkeleriyle yürütüldü."
   },
   {
-    title: "YOLOv8 Eğitim Boru Hattı",
+    title: "YOLOv26s-P2 Eğitim Boru Hattı",
     description:
       "Model, sınıf dengesizliği, küçük nesne algılama ve hareket bulanımı gibi zorlu koşullara göre optimize edildi. Deneyler, parametre kaydı ve sürümleme prensipleriyle yönetildi."
   },
@@ -34,22 +34,103 @@ export const architectureCards = [
   }
 ] as const;
 
+export const architectureFlow = [
+  {
+    title: "Kamera / Video",
+    description:
+      "Sistemin giriş katmanıdır. Canlı kamera, saha videosu veya test görüntüsü bu aşamada alınır ve analiz hattına aktarılır."
+  },
+  {
+    title: "YOLOv26s-P2",
+    description:
+      "Drone, kuş, uçak ve helikopter gibi hava hedeflerini görüntü üzerinde tespit eden ana derin öğrenme modelidir. P2 katmanı sayesinde küçük nesne tespiti için daha uygun bir yapı kullanılır. Bu katman ham kutuları, sınıf tahminlerini ve güven skorlarını üretir."
+  },
+  {
+    title: "Temperature Scaling",
+    description:
+      "Modelin ürettiği güven skorlarını daha kullanılabilir hale getiren kalibrasyon katmanıdır. Mikro drone hedeflerinde confidence değerleri bazen düşük veya kararsız görünebilir. Temperature scaling, bu skorların takip ve karar katmanında daha dengeli yorumlanmasına yardımcı olur."
+  },
+  {
+    title: "Duplicate Merge",
+    description:
+      "Aynı hedef için oluşabilecek üst üste veya çok yakın tespit kutularını birleştirir. Özellikle NMS-free veya küçük hedef odaklı tespitlerde aynı drone için birden fazla kutu oluşabilir. Bu katman, takip sistemine daha temiz ve tekilleştirilmiş tespitler gönderir."
+  },
+  {
+    title: "BIoUTracker",
+    description:
+      "Tespit edilen hedeflere kararlı takip kimliği atayan takip katmanıdır. Klasik IoU, çok küçük kutularda birkaç piksellik kaymaya karşı hassas kalabilir. BIoUTracker, kutuları sanal tamponla genişleterek mikro drone hedeflerinin video boyunca daha stabil takip edilmesini sağlar."
+  },
+  {
+    title: "TrackBoost",
+    description:
+      "Sistemin en kritik karar stabilizasyon katmanıdır. Modelin tek karelik tahminine değil, aynı hedefin video boyunca biriken geçmişine bakar. Böylece bir drone bazı karelerde yanlışlıkla bird gibi sınıflandırılsa bile sistem hedefi hemen kaybetmez. TrackBoost, ham model çıktısını candidate, drone_suspect, confirmed_drone veya non_threat kararına dönüştürür."
+  },
+  {
+    title: "UI + MQTT Alarm",
+    description:
+      "Son kararın operatöre ve dış sistemlere aktarıldığı katmandır. Arayüzde hedef kutusu, takip ID'si, güven skoru, kilit durumu ve FCS göstergeleri sunulur. MQTT alarm yapısı sayesinde onaylanmış drone tehdidi düşük bant genişlikli JSON mesajı olarak karargah veya mobil istemci tarafına iletilebilir."
+  }
+] as const;
+
 export const metricsData = [
   {
-    metrik: "Doğruluk",
-    oran: 93.6
+    metrik: "Precision",
+    oran: 92.8
   },
   {
-    metrik: "Hassasiyet",
-    oran: 89.4
-  },
-  {
-    metrik: "Duyarlılık",
-    oran: 91.8
+    metrik: "Recall",
+    oran: 88.7
   },
   {
     metrik: "mAP50",
-    oran: 94.8
+    oran: 91.4
+  },
+  {
+    metrik: "Stabilite",
+    oran: 95.7
+  }
+] as const;
+
+export const metricCards = [
+  {
+    label: "Dataset",
+    value: "~88K",
+    suffix: "görüntü"
+  },
+  {
+    label: "Model",
+    value: "YOLOv26s-P2"
+  },
+  {
+    label: "Precision",
+    value: 92.8,
+    prefix: "%",
+    decimals: 1
+  },
+  {
+    label: "Recall",
+    value: 88.7,
+    prefix: "%",
+    decimals: 1
+  },
+  {
+    label: "mAP50",
+    value: 91.4,
+    prefix: "%",
+    decimals: 1
+  },
+  {
+    label: "Video Test",
+    value: 30.4,
+    suffix: " FPS",
+    decimals: 1
+  },
+  {
+    label: "TrackBoost Stabilite",
+    value: 95.7,
+    prefix: "%",
+    decimals: 1,
+    note: "drone-state görünürlük"
   }
 ] as const;
 

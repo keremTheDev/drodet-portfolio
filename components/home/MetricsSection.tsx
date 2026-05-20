@@ -1,56 +1,65 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-import { MetricsChart } from "@/components/home/MetricsChart";
-import { metricsData } from "@/lib/data";
+import { MetricsCarousel } from "@/components/home/MetricsCarousel";
+import { metricCards } from "@/lib/data";
 
 export function MetricsSection() {
   return (
-    <section className="section-frame bg-secondary">
+    <section id="metrikler" className="section-frame bg-secondary">
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div>
             <SectionHeading
               eyebrow="Analitik"
-              title="Model Başarımı ve Metrikler"
-              description="Ölçümler, küçük nesne tespitindeki zorluklar ve saha koşullarındaki görsel belirsizlikler dikkate alınarak yorumlandı. Grafik, anlatımı yalnızca sonuca değil karar güvenine de bağlıyor."
+              title="Model Başarımı ve Sistem Kanıtı"
+              description="Model eğitim sonuçları, saha videosu performansı ve TrackBoost görünürlük kararlılığı birlikte yorumlandı."
             />
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {metricsData.map((item) => (
-                <div key={item.metrik} className="card-surface p-5">
-                  <p className="font-mono text-sm uppercase tracking-[0.14em] text-accent-primary">
-                    {item.metrik}
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              {metricCards.map((item) => (
+                <div
+                  key={item.label}
+                  className={`card-surface flex min-h-[132px] flex-col justify-between p-5 ${
+                    item.label === "TrackBoost Stabilite" ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""
+                  }`}
+                >
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-primary">
+                    {item.label}
                   </p>
-                  <AnimatedCounter
-                    value={item.oran}
-                    decimals={1}
-                    prefix="%"
-                    className="mt-3 block font-sans text-3xl font-black text-slate-dark"
-                  />
+
+                  <div>
+                    {typeof item.value === "number" ? (
+                      <AnimatedCounter
+                        value={item.value}
+                        decimals={item.decimals ?? 0}
+                        prefix={"prefix" in item ? item.prefix : ""}
+                        suffix={"suffix" in item ? item.suffix : ""}
+                        className="mt-3 block whitespace-nowrap font-sans text-3xl font-black text-slate-dark"
+                      />
+                    ) : (
+                      <p className="mt-3 break-words font-sans text-[1.45rem] font-black leading-tight text-slate-dark sm:text-[1.7rem]">
+                        {item.value}
+                      </p>
+                    )}
+
+                    {"suffix" in item && typeof item.value !== "number" && item.suffix ? (
+                      <p className="mt-1 font-sans text-sm font-semibold text-slate-light">
+                        {item.suffix}
+                      </p>
+                    ) : null}
+
+                    {"note" in item && item.note ? (
+                      <p className="mt-2 font-sans text-sm font-semibold text-slate-light">
+                        {item.note}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="card-surface p-5">
-                <p className="font-mono text-sm uppercase tracking-[0.14em] text-accent-primary">
-                  Ortalama Gecikme
-                </p>
-                <p className="mt-3 font-sans text-3xl font-black text-slate-dark">41 ms</p>
-              </div>
-              <div className="card-surface p-5">
-                <p className="font-mono text-sm uppercase tracking-[0.14em] text-accent-primary">
-                  Çalışma Modu
-                </p>
-                <p className="mt-3 font-sans text-3xl font-black text-slate-dark">
-                  Gerçek Zamanlı
-                </p>
-              </div>
-            </div>
           </div>
 
-          <div className="card-surface p-5 sm:p-8">
-            <MetricsChart />
-          </div>
+          <MetricsCarousel />
         </div>
       </Container>
     </section>

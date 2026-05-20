@@ -13,11 +13,15 @@ const teamMembers = [
       "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/emo_linkedin_pp.jpeg",
     linkedinUrl: "https://www.linkedin.com/in/emirhan-zileli/",
     githubUrl: "https://github.com/Emirhannz",
-    bio: "Projenin yapay zeka omurgasını oluşturan özel veri setinin (dataset) hazırlanması ve YOLOv8 modelinin eğitilmesinden sorumludur. Sadece makine öğrenmesi süreçleriyle kalmayıp, yazılım katmanlarında performans optimizasyonları gerçekleştirmiş ve kullanıcı arayüzünün (UI) geliştirilmesinde kritik rol oynamıştır.",
+    bio: "Projenin yapay zeka omurgasını oluşturan özel veri setinin (dataset) hazırlanması ve YOLOv26s-P2 modelinin eğitilmesinden sorumludur. Sadece makine öğrenmesi süreçleriyle kalmayıp, yazılım katmanlarında performans optimizasyonları gerçekleştirmiş ve kullanıcı arayüzünün (UI) geliştirilmesinde kritik rol oynamıştır.",
     cvLinks: [
       {
-        label: "Özgeçmişi İndir",
+        label: "Özgeçmiş (TR)",
         url: "https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/cv/CV%20-%20Emirhan%20Zileli.pdf"
+      },
+      {
+        label: "Özgeçmiş (EN)",
+        url: "/cv/CV-Emirhan_Zileli_ENG.pdf"
       }
     ]
   },

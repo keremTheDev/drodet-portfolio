@@ -1,7 +1,6 @@
-import { ArchitectureCard } from "@/components/home/ArchitectureCard";
+import { ArchitectureFlow } from "@/components/home/ArchitectureFlow";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { architectureCards } from "@/lib/data";
 
 export function ArchitectureSection() {
   return (
@@ -10,19 +9,10 @@ export function ArchitectureSection() {
         <SectionHeading
           eyebrow="Mimari"
           title="Geliştirme Süreci ve Mimari"
-          description="Özel veri kümesinden saha validasyonuna uzanan süreç, savunma projelerinde gerekli disiplin, izlenebilirlik ve modüler entegrasyon anlayışıyla tasarlandı."
+          description="Özel veri kümesinden arayüz ve alarm katmanına uzanan boru hattı, düşük gecikme ve kararlı takip için modüler olarak tasarlandı."
         />
 
-        <div className="mt-16 grid gap-6 lg:grid-cols-3">
-          {architectureCards.map((card, index) => (
-            <ArchitectureCard
-              key={card.title}
-              index={index}
-              title={card.title}
-              description={card.description}
-            />
-          ))}
-        </div>
+        <ArchitectureFlow />
       </Container>
     </section>
   );

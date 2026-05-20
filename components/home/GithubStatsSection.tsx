@@ -7,7 +7,7 @@ import { getGithubStats } from "@/lib/github";
 type StatCard = {
   title: string;
   description: string;
-  value: number;
+  value: number | null;
   icon: typeof GitCommitHorizontal;
   suffix: string;
   decimals?: number;
@@ -31,27 +31,29 @@ export async function GithubStatsSection() {
   const cards: StatCard[] = [
     {
       title: "TOTAL COMMITS",
-      description: "Depodaki toplam sürümleme aktivitesini yansıtan commit hacmi.",
+      description: "GitHub deposunun varsayılan branch'indeki toplam commit sayısı.",
       value: stats.commits,
       icon: GitCommitHorizontal,
       suffix: ""
     },
     {
-      title: "LINES OF CODE (ADDITIONS)",
-      description: "Contributors stats API üzerinden hesaplanan toplam eklenen kod satırı.",
+      title: "TRACKED CODE LINES",
+      description: "GitHub repo ağacındaki izlenen kod ve konfigürasyon dosyalarından hesaplanır.",
       value: stats.linesOfCode,
       icon: Code2,
       suffix: ""
     },
     {
       title: "PRIMARY LANGUAGE",
-      description: "Kod tabanındaki baskın dilin toplam dağılım yüzdesi.",
+      description: "GitHub linguist verisine göre kod tabanındaki baskın dil.",
       value: stats.topLanguagePercentage,
       icon: Languages,
       suffix: "%",
       decimals: 1,
-      languageName: stats.topLanguage,
-      languageColor: languageColors[stats.topLanguage] ?? "#57606a"
+      languageName: stats.topLanguage ?? undefined,
+      languageColor: stats.topLanguage
+        ? (languageColors[stats.topLanguage] ?? "#57606a")
+        : "#57606a"
     }
   ];
 
@@ -66,7 +68,9 @@ export async function GithubStatsSection() {
             Geliştirme Süreci ve Canlı Metrikler
           </h2>
           <p className="body-large mt-6 text-wrap-balance">
-            Projemizin kaynak kod deposundan alınan anlık veriler.
+            {stats.repo
+              ? `${stats.repo} deposundan alınan güncel veriler.`
+              : "GitHub repo ve token ayarları yapıldığında canlı veriler burada görünür."}
           </p>
         </div>
 
@@ -87,12 +91,18 @@ export async function GithubStatsSection() {
                     </p>
                   </div>
 
-                  <AnimatedCounter
-                    value={card.value}
-                    decimals={card.decimals ?? 0}
-                    suffix={card.suffix}
-                    className="mt-4 block font-mono text-3xl font-bold text-[#24292f]"
-                  />
+                  {card.value === null ? (
+                    <span className="mt-4 block font-mono text-2xl font-bold text-[#24292f]">
+                      {stats.isConfigured ? "Hesaplanıyor" : "Bağlantı bekleniyor"}
+                    </span>
+                  ) : (
+                    <AnimatedCounter
+                      value={card.value}
+                      decimals={card.decimals ?? 0}
+                      suffix={card.suffix}
+                      className="mt-4 block font-mono text-3xl font-bold text-[#24292f]"
+                    />
+                  )}
 
                   {card.languageName ? (
                     <div className="mt-4 flex items-center gap-2">

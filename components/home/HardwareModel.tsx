@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Html, OrbitControls, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
@@ -46,9 +46,11 @@ function ESP32Model() {
   );
 }
 
-useGLTF.preload(ESP32_MODEL_URL);
-
 export function HardwareModel() {
+  useEffect(() => {
+    useGLTF.preload(ESP32_MODEL_URL);
+  }, []);
+
   return (
     <div className="relative flex h-[350px] w-full items-center justify-center overflow-hidden rounded-brand border border-[#1414131A] bg-[#1414130A] md:h-[450px]">
       <Canvas
