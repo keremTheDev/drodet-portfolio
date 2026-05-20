@@ -11,12 +11,14 @@ export type GithubStats = {
   isConfigured: boolean;
 };
 
-const EMPTY_STATS: GithubStats = {
-  commits: null,
-  linesOfCode: null,
-  topLanguage: null,
-  topLanguagePercentage: null,
-  repo: null,
+const FALLBACK_REPO = "Emirhannz/DroDet";
+
+const FALLBACK_STATS: GithubStats = {
+  commits: 25,
+  linesOfCode: 10686,
+  topLanguage: "Python",
+  topLanguagePercentage: 100,
+  repo: FALLBACK_REPO,
   isConfigured: false
 };
 
@@ -325,7 +327,7 @@ export async function getGithubStats(): Promise<GithubStats> {
   const { repo } = getGithubConfig();
 
   if (!repo) {
-    return EMPTY_STATS;
+    return FALLBACK_STATS;
   }
 
   try {
@@ -346,7 +348,7 @@ export async function getGithubStats(): Promise<GithubStats> {
     };
   } catch {
     return {
-      ...EMPTY_STATS,
+      ...FALLBACK_STATS,
       repo,
       isConfigured: true
     };
