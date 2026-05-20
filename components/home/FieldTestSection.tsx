@@ -9,11 +9,20 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 type ScrollAnimatedVideoProps = {
   src: string;
   label: string;
+  orientation: "portrait" | "landscape";
 };
 
-function ScrollAnimatedVideo({ src, label }: ScrollAnimatedVideoProps) {
+function ScrollAnimatedVideo({
+  src,
+  label,
+  orientation
+}: ScrollAnimatedVideoProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const inView = useInView(videoRef, { once: false, amount: 0.5 });
+  const wrapperClassName =
+    orientation === "portrait"
+      ? "relative w-full aspect-[9/16] max-h-[80vh] overflow-hidden rounded-brand border border-[#1414131A] bg-black/5"
+      : "relative w-full aspect-video overflow-hidden rounded-brand border border-[#1414131A] bg-black/5";
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -35,17 +44,20 @@ function ScrollAnimatedVideo({ src, label }: ScrollAnimatedVideoProps) {
   return (
     <div className="w-full">
       <div className="mb-3 font-sans text-sm font-semibold text-slate-dark">{label}</div>
-      <video
-        ref={videoRef}
-        className="w-full rounded-brand border border-[#1414131A] bg-black/5 object-contain"
-        controls
-        muted
-        playsInline
-        poster="/images/field-test-poster.svg"
-        aria-label={label}
-      >
-        <source src={src} type="video/mp4" />
-      </video>
+      <div className={wrapperClassName}>
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-contain"
+          controls
+          muted
+          playsInline
+          preload="metadata"
+          poster="/images/field-test-poster.svg"
+          aria-label={label}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+      </div>
     </div>
   );
 }
@@ -64,10 +76,12 @@ export function FieldTestSection() {
           <div className="flex w-full flex-col gap-8 sm:gap-10">
             <ScrollAnimatedVideo
               label="TRT Saha Kaydı"
+              orientation="portrait"
               src="https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/videos/WhatsApp%20Video%202026-05-18%20at%2002.41.41.mp4"
             />
             <ScrollAnimatedVideo
               label="30 FPS OBS Testi"
+              orientation="landscape"
               src="https://ou5njzgsjxvfuoex.public.blob.vercel-storage.com/videos/obs_3x_30fps.mp4"
             />
           </div>
